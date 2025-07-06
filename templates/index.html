@@ -2,85 +2,309 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hypertension Risk Predictor</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background-color: #f4f6f8;
-    }
-    h2 {
-      color: #333;
-    }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      width: 300px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+    * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
-    button {
-      margin-top: 15px;
-      padding: 10px;
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
       width: 100%;
-      background-color: #28a745;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .health-icon {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      color: #34495e;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    input {
+      padding: 12px 16px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+
+    input:hover {
+      border-color: #bdc3c7;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
     #result {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #007bff;
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    #result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #result.success {
+      background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+    }
+
+    #result.error {
+      background: linear-gradient(135deg, #e17055 0%, #fd79a8 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3);
+    }
+
+    .form-hint {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h2>{{ title }}</h2>
+  <div class="container">
+    <div class="health-icon">🩺</div>
+    <h2>Hypertension Risk Predictor</h2>
 
-  <form id="prediction-form">
-    <label>Age: <input type="number" name="age" required></label>
-    <label>BMI: <input type="number" step="0.1" name="bmi" required></label>
-    <label>Heart Rate: <input type="number" name="heart_rate" required></label>
-    <label>Systolic BP: <input type="number" name="systolic_bp" required></label>
-    <label>Diastolic BP: <input type="number" name="diastolic_bp" required></label>
-    <label>Cholesterol (0/1/2): <input type="number" name="cholesterol" required></label>
-    <label>Glucose (0/1/2): <input type="number" name="glucose" required></label>
-    <label>Smoking (0/1): <input type="number" name="smoking" required></label>
-    <label>Alcohol Intake (0/1): <input type="number" name="alcohol_intake" required></label>
-    <label>Physical Activity (0/1): <input type="number" name="physical_activity" required></label>
+    <form id="prediction-form">
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" required min="1" max="120">
+          <div class="form-hint">Enter your age in years</div>
+        </div>
 
-    <button type="submit">Predict Risk</button>
-  </form>
+        <div class="form-group">
+          <label for="bmi">BMI</label>
+          <input type="number" id="bmi" name="bmi" step="0.1" required min="10" max="50">
+          <div class="form-hint">Body Mass Index</div>
+        </div>
+      </div>
 
-  <div id="result"></div>
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="heart_rate">Heart Rate</label>
+          <input type="number" id="heart_rate" name="heart_rate" required min="40" max="200">
+          <div class="form-hint">Beats per minute</div>
+        </div>
+
+        <div class="form-group">
+          <label for="systolic_bp">Systolic BP</label>
+          <input type="number" id="systolic_bp" name="systolic_bp" required min="80" max="250">
+          <div class="form-hint">Upper blood pressure</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="diastolic_bp">Diastolic BP</label>
+          <input type="number" id="diastolic_bp" name="diastolic_bp" required min="40" max="150">
+          <div class="form-hint">Lower blood pressure</div>
+        </div>
+
+        <div class="form-group">
+          <label for="cholesterol">Cholesterol Level</label>
+          <input type="number" id="cholesterol" name="cholesterol" required min="0" max="2">
+          <div class="form-hint">0=Normal, 1=Above, 2=High</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="glucose">Glucose Level</label>
+          <input type="number" id="glucose" name="glucose" required min="0" max="2">
+          <div class="form-hint">0=Normal, 1=Above, 2=High</div>
+        </div>
+
+        <div class="form-group">
+          <label for="smoking">Smoking</label>
+          <input type="number" id="smoking" name="smoking" required min="0" max="1">
+          <div class="form-hint">0=No, 1=Yes</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="alcohol_intake">Alcohol Intake</label>
+          <input type="number" id="alcohol_intake" name="alcohol_intake" required min="0" max="1">
+          <div class="form-hint">0=No, 1=Yes</div>
+        </div>
+
+        <div class="form-group">
+          <label for="physical_activity">Physical Activity</label>
+          <input type="number" id="physical_activity" name="physical_activity" required min="0" max="1">
+          <div class="form-hint">0=No, 1=Yes</div>
+        </div>
+      </div>
+
+      <button type="submit">Predict Risk</button>
+    </form>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Analyzing your health data...</p>
+    </div>
+
+    <div id="result"></div>
+  </div>
 
   <script>
     const form = document.getElementById('prediction-form');
     const resultDiv = document.getElementById('result');
+    const loadingDiv = document.getElementById('loading');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Show loading
+      loadingDiv.classList.add('show');
+      resultDiv.classList.remove('show', 'success', 'error');
 
       const formData = new FormData(form);
       const data = {};
 
       for (const [key, value] of formData.entries()) {
-        data[key] = Number(value); // Convert inputs to numbers
+        data[key] = Number(value);
       }
 
       try {
-        const response = await fetch('http://127.0.0.1:5000/predict', {
+        const response = await fetch('/predict', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -90,14 +314,21 @@
 
         const result = await response.json();
 
+        // Hide loading
+        loadingDiv.classList.remove('show');
+
         if (result.prediction !== undefined) {
           resultDiv.textContent = `🩺 Risk Level: ${result.risk_level}`;
+          resultDiv.classList.add('show', 'success');
         } else {
           resultDiv.textContent = '⚠️ Error: ' + (result.error || 'Invalid response');
+          resultDiv.classList.add('show', 'error');
         }
       } catch (err) {
-      console.log(err);
-        resultDiv.textContent = '⚠️ Failed to connect to the server: '+err;
+        console.log(err);
+        loadingDiv.classList.remove('show');
+        resultDiv.textContent = '⚠️ Failed to connect to the server: ' + err;
+        resultDiv.classList.add('show', 'error');
       }
     });
   </script>
