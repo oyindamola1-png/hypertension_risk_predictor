@@ -19,3 +19,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/oyindamola1-png/hypertension_risk_predictor"
+
+[tool.setuptools]
+py-modules = ["app"]
+
+[tool.setuptools.packages.find]
+exclude = ["templates*", "static*", "model*"]
