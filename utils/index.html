@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hypertension Risk Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f4f6f8;
+    }
+    h2 {
+      color: #333;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Hypertension Risk Prediction</h2>
+
+  <form id="prediction-form">
+    <label>Age: <input type="number" name="age" required></label>
+    <label>BMI: <input type="number" step="0.1" name="bmi" required></label>
+    <label>Heart Rate: <input type="number" name="heart_rate" required></label>
+    <label>Systolic BP: <input type="number" name="systolic_bp" required></label>
+    <label>Diastolic BP: <input type="number" name="diastolic_bp" required></label>
+    <label>Cholesterol (0/1/2): <input type="number" name="cholesterol" required></label>
+    <label>Glucose (0/1/2): <input type="number" name="glucose" required></label>
+    <label>Smoking (0/1): <input type="number" name="smoking" required></label>
+    <label>Alcohol Intake (0/1): <input type="number" name="alcohol_intake" required></label>
+    <label>Physical Activity (0/1): <input type="number" name="physical_activity" required></label>
+
+    <button type="submit">Predict Risk</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('prediction-form');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {};
+
+      for (const [key, value] of formData.entries()) {
+        data[key] = Number(value); // Convert inputs to numbers
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.prediction !== undefined) {
+          resultDiv.textContent = `🩺 Risk Level: ${result.risk_level}`;
+        } else {
+          resultDiv.textContent = '⚠️ Error: ' + (result.error || 'Invalid response');
+        }
+      } catch (err) {
+      console.log(err);
+        resultDiv.textContent = '⚠️ Failed to connect to the server: '+err;
+      }
+    });
+  </script>
+
+</body>
+</html>
