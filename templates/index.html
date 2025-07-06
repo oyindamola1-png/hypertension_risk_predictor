@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,23 +65,32 @@
       font-size: 0.95rem;
     }
 
-    input {
+    input, select {
       padding: 12px 16px;
       border: 2px solid #e1e8ed;
       border-radius: 10px;
       font-size: 1rem;
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.9);
+      appearance: none;
     }
 
-    input:focus {
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+      padding-right: 40px;
+    }
+
+    input:focus, select:focus {
       outline: none;
       border-color: #667eea;
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
       transform: translateY(-2px);
     }
 
-    input:hover {
+    input:hover, select:hover {
       border-color: #bdc3c7;
     }
 
@@ -142,6 +152,12 @@
       box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
     }
 
+    #result.warning {
+      background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3);
+    }
+
     #result.error {
       background: linear-gradient(135deg, #e17055 0%, #fd79a8 100%);
       color: white;
@@ -176,8 +192,13 @@
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     @media (max-width: 600px) {
@@ -185,17 +206,18 @@
         padding: 30px 20px;
         margin: 10px;
       }
-      
+
       .input-grid {
         grid-template-columns: 1fr;
       }
-      
+
       h2 {
         font-size: 1.8rem;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
@@ -211,65 +233,91 @@
         </div>
 
         <div class="form-group">
+          <label for="sex">Sex</label>
+          <select id="sex" name="sex" required>
+            <option value="">Select...</option>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+          <div class="form-hint">Biological sex</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="systolic_bp">Systolic BP (mmHg)</label>
+          <input type="number" id="systolic_bp" name="systolic_bp" required min="80" max="250">
+          <div class="form-hint">Upper blood pressure reading</div>
+        </div>
+
+        <div class="form-group">
+          <label for="diastolic_bp">Diastolic BP (mmHg)</label>
+          <input type="number" id="diastolic_bp" name="diastolic_bp" required min="40" max="150">
+          <div class="form-hint">Lower blood pressure reading</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="cholesterol">Cholesterol Level</label>
+          <select id="cholesterol" name="cholesterol" required>
+            <option value="">Select...</option>
+            <option value="0">Normal</option>
+            <option value="1">Above Normal</option>
+            <option value="2">Well Above Normal</option>
+          </select>
+          <div class="form-hint">Cholesterol category</div>
+        </div>
+
+        <div class="form-group">
+          <label for="glucose">Glucose Level</label>
+          <select id="glucose" name="glucose" required>
+            <option value="">Select...</option>
+            <option value="0">Normal</option>
+            <option value="1">Above Normal</option>
+            <option value="2">Well Above Normal</option>
+          </select>
+          <div class="form-hint">Blood glucose category</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="smoking">Smoking</label>
+          <select id="smoking" name="smoking" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+          <div class="form-hint">Do you smoke?</div>
+        </div>
+
+        <div class="form-group">
+          <label for="alcohol_intake">Alcohol Intake</label>
+          <select id="alcohol_intake" name="alcohol_intake" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+          <div class="form-hint">Regular alcohol consumption</div>
+        </div>
+      </div>
+
+      <div class="input-grid">
+        <div class="form-group">
+          <label for="physical_activity">Physical Activity</label>
+          <select id="physical_activity" name="physical_activity" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+          <div class="form-hint">Regular exercise</div>
+        </div>
+
+        <div class="form-group">
           <label for="bmi">BMI</label>
           <input type="number" id="bmi" name="bmi" step="0.1" required min="10" max="50">
           <div class="form-hint">Body Mass Index</div>
-        </div>
-      </div>
-
-      <div class="input-grid">
-        <div class="form-group">
-          <label for="heart_rate">Heart Rate</label>
-          <input type="number" id="heart_rate" name="heart_rate" required min="40" max="200">
-          <div class="form-hint">Beats per minute</div>
-        </div>
-
-        <div class="form-group">
-          <label for="systolic_bp">Systolic BP</label>
-          <input type="number" id="systolic_bp" name="systolic_bp" required min="80" max="250">
-          <div class="form-hint">Upper blood pressure</div>
-        </div>
-      </div>
-
-      <div class="input-grid">
-        <div class="form-group">
-          <label for="diastolic_bp">Diastolic BP</label>
-          <input type="number" id="diastolic_bp" name="diastolic_bp" required min="40" max="150">
-          <div class="form-hint">Lower blood pressure</div>
-        </div>
-
-        <div class="form-group">
-          <label for="cholesterol">Cholesterol Level</label>
-          <input type="number" id="cholesterol" name="cholesterol" required min="0" max="2">
-          <div class="form-hint">0=Normal, 1=Above, 2=High</div>
-        </div>
-      </div>
-
-      <div class="input-grid">
-        <div class="form-group">
-          <label for="glucose">Glucose Level</label>
-          <input type="number" id="glucose" name="glucose" required min="0" max="2">
-          <div class="form-hint">0=Normal, 1=Above, 2=High</div>
-        </div>
-
-        <div class="form-group">
-          <label for="smoking">Smoking</label>
-          <input type="number" id="smoking" name="smoking" required min="0" max="1">
-          <div class="form-hint">0=No, 1=Yes</div>
-        </div>
-      </div>
-
-      <div class="input-grid">
-        <div class="form-group">
-          <label for="alcohol_intake">Alcohol Intake</label>
-          <input type="number" id="alcohol_intake" name="alcohol_intake" required min="0" max="1">
-          <div class="form-hint">0=No, 1=Yes</div>
-        </div>
-
-        <div class="form-group">
-          <label for="physical_activity">Physical Activity</label>
-          <input type="number" id="physical_activity" name="physical_activity" required min="0" max="1">
-          <div class="form-hint">0=No, 1=Yes</div>
         </div>
       </div>
 
@@ -289,12 +337,99 @@
     const resultDiv = document.getElementById('result');
     const loadingDiv = document.getElementById('loading');
 
+    // Simple risk calculation based on common hypertension risk factors
+    function calculateRisk(data) {
+      let riskScore = 0;
+      let factors = [];
+
+      // Age factor
+      if (data.age > 65) {
+        riskScore += 2;
+        factors.push('Advanced age');
+      } else if (data.age > 45) {
+        riskScore += 1;
+        factors.push('Middle age');
+      }
+
+      // Sex factor (males have higher risk)
+      if (data.sex === 1) {
+        riskScore += 1;
+      }
+
+      // Blood pressure factors
+      if (data.systolic_bp > 140 || data.diastolic_bp > 90) {
+        riskScore += 3;
+        factors.push('High blood pressure');
+      } else if (data.systolic_bp > 130 || data.diastolic_bp > 80) {
+        riskScore += 2;
+        factors.push('Elevated blood pressure');
+      }
+
+      // Cholesterol
+      if (data.cholesterol === 2) {
+        riskScore += 2;
+        factors.push('High cholesterol');
+      } else if (data.cholesterol === 1) {
+        riskScore += 1;
+        factors.push('Elevated cholesterol');
+      }
+
+      // Glucose
+      if (data.glucose === 2) {
+        riskScore += 2;
+        factors.push('High glucose');
+      } else if (data.glucose === 1) {
+        riskScore += 1;
+        factors.push('Elevated glucose');
+      }
+
+      // Lifestyle factors
+      if (data.smoking === 1) {
+        riskScore += 2;
+        factors.push('Smoking');
+      }
+
+      if (data.alcohol_intake === 1) {
+        riskScore += 1;
+        factors.push('Alcohol consumption');
+      }
+
+      if (data.physical_activity === 0) {
+        riskScore += 1;
+        factors.push('Sedentary lifestyle');
+      }
+
+      // BMI factor
+      if (data.bmi > 30) {
+        riskScore += 2;
+        factors.push('Obesity');
+      } else if (data.bmi > 25) {
+        riskScore += 1;
+        factors.push('Overweight');
+      }
+
+      // Determine risk level
+      let riskLevel, riskClass;
+      if (riskScore <= 2) {
+        riskLevel = 'Low Risk';
+        riskClass = 'success';
+      } else if (riskScore <= 5) {
+        riskLevel = 'Moderate Risk';
+        riskClass = 'warning';
+      } else {
+        riskLevel = 'High Risk';
+        riskClass = 'warning';
+      }
+
+      return { riskLevel, riskClass, factors, riskScore };
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       // Show loading
       loadingDiv.classList.add('show');
-      resultDiv.classList.remove('show', 'success', 'error');
+      resultDiv.classList.remove('show', 'success', 'warning', 'error');
 
       const formData = new FormData(form);
       const data = {};
@@ -303,35 +438,32 @@
         data[key] = Number(value);
       }
 
-      try {
-        const response = await fetch('/predict', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
+      // Simulate API delay
+      setTimeout(() => {
+        try {
+          const result = calculateRisk(data);
+          
+          // Hide loading
+          loadingDiv.classList.remove('show');
 
-        const result = await response.json();
-
-        // Hide loading
-        loadingDiv.classList.remove('show');
-
-        if (result.prediction !== undefined) {
-          resultDiv.textContent = `🩺 Risk Level: ${result.risk_level}`;
-          resultDiv.classList.add('show', 'success');
-        } else {
-          resultDiv.textContent = '⚠️ Error: ' + (result.error || 'Invalid response');
+          let message = `🩺 ${result.riskLevel}`;
+          if (result.factors.length > 0) {
+            message += `\n\nRisk factors: ${result.factors.join(', ')}`;
+          }
+          
+          resultDiv.innerHTML = message.replace(/\n/g, '<br>');
+          resultDiv.classList.add('show', result.riskClass);
+          
+        } catch (err) {
+          console.error(err);
+          loadingDiv.classList.remove('show');
+          resultDiv.textContent = '⚠️ Error calculating risk: ' + err.message;
           resultDiv.classList.add('show', 'error');
         }
-      } catch (err) {
-        console.log(err);
-        loadingDiv.classList.remove('show');
-        resultDiv.textContent = '⚠️ Failed to connect to the server: ' + err;
-        resultDiv.classList.add('show', 'error');
-      }
+      }, 1500);
     });
   </script>
 
 </body>
+
 </html>
